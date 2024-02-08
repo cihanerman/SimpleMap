@@ -13,6 +13,6 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	log.Println("Server started on port " + port)
+	log.Println("Server started on address http//localhost " + port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
