@@ -1,10 +1,11 @@
 package simple_map
 
 import (
+	"reflect"
 	"testing"
 )
 
-func TestStore_Set_Get(t *testing.T) {
+func TestStore_Set_Get_Delete_Save_Load(t *testing.T) {
 	t.Parallel()
 
 	store := NewStore()
@@ -29,7 +30,27 @@ func TestStore_Set_Get(t *testing.T) {
 				t.Errorf("Set() = %v, want %v", ok, true)
 			}
 
+			store.Delete(tt.args.key)
+			if _, ok := store.Get(tt.args.key); ok {
+				t.Errorf("Delete() = %v, want %v", ok, false)
+			}
+
 		})
+	}
+
+	// save test
+	store.Set("test", "test")
+	err := store.Save()
+	if err != nil {
+		t.Errorf("Save() = %v, want %v", err, nil)
+	}
+
+	// load test
+	store.items = nil
+	store.Load()
+
+	if !reflect.DeepEqual(store.items, map[string]any{"test": "test"}) {
+		t.Errorf("Load() = %v, want %v", store.items, map[string]any{"test": "test"})
 	}
 }
 

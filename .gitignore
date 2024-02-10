@@ -19,3 +19,5 @@
 
 # Go workspace file
 go.work
+/pkg/utils/test.json
+/internal/simple_map/store.json

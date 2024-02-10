@@ -11,13 +11,37 @@ import (
 func NewRouter() http.Handler {
 	mux := http.NewServeMux()
 	//mux.HandleFunc("/", healthCheckHandler)
-	mux.HandleFunc("/health", healthCheckHandler)
+
+	// TODO: This will change in go 1.22
+	// sample mux.HandleFunc("GET /healthcheck", healthCheckHandler)
+	mux.HandleFunc("/healthcheck", healthCheckHandler)
 	mux.HandleFunc("/set_key", setKeyHandler)
 	mux.HandleFunc("/get_key", getKeyHandler)
+	mux.HandleFunc("/delete_key", deleteKeyHandler)
 	return mux
 }
 
+func deleteKeyHandler(writer http.ResponseWriter, request *http.Request) {
+	// TODO: This will delete in go 1.22
+	if request.Method != http.MethodGet {
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	key := request.URL.Query().Get("key")
+	if key == "" {
+		http.Error(writer, "Key is required", http.StatusBadRequest)
+		return
+	}
+
+	service := simple_map.NewStoreService()
+	service.Delete(key)
+
+	writer.WriteHeader(http.StatusNoContent)
+}
+
 func getKeyHandler(writer http.ResponseWriter, request *http.Request) {
+	// TODO: This will delete in go 1.22
 	if request.Method != http.MethodGet {
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -49,6 +73,7 @@ func getKeyHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func setKeyHandler(writer http.ResponseWriter, request *http.Request) {
+	// TODO: This will delete in go 1.22
 	if request.Method != http.MethodPost {
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -76,6 +101,7 @@ func setKeyHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func healthCheckHandler(writer http.ResponseWriter, request *http.Request) {
+	// TODO: This will delete in go 1.22
 	if request.Method != http.MethodGet {
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return

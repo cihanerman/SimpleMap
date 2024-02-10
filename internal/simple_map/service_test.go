@@ -42,6 +42,10 @@ func TestStoreService_Set_Get(t *testing.T) {
 				t.Errorf("Set() = %v, want %v", ok, true)
 			}
 
+			service.Delete(tt.args.key)
+			if _, ok := store.Get(tt.args.key); ok {
+				t.Errorf("Delete() = %v, want %v", ok, false)
+			}
 		})
 	}
 }

@@ -15,3 +15,7 @@ func (s *StoreService) Set(key string, value any) {
 func (s *StoreService) Get(key string) (any, bool) {
 	return s.store.Get(key)
 }
+
+func (s *StoreService) Delete(key string) {
+	s.store.Delete(key)
+}
