@@ -6,9 +6,10 @@ import (
 	"github.com/cihanerman/SimpleMap/internal/simple_map"
 	"github.com/go-playground/validator/v10"
 	"net/http"
+	"os"
 )
 
-func NewRouter() http.Handler {
+func NewServer() *http.Server {
 	mux := http.NewServeMux()
 	//mux.HandleFunc("/", healthCheckHandler)
 
@@ -18,7 +19,17 @@ func NewRouter() http.Handler {
 	mux.HandleFunc("/set_key", setKeyHandler)
 	mux.HandleFunc("/get_key", getKeyHandler)
 	mux.HandleFunc("/delete_key", deleteKeyHandler)
-	return mux
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: mux,
+	}
+	return server
 }
 
 func deleteKeyHandler(writer http.ResponseWriter, request *http.Request) {

@@ -19,3 +19,7 @@ func (s *StoreService) Get(key string) (any, bool) {
 func (s *StoreService) Delete(key string) {
 	s.store.Delete(key)
 }
+
+func (s *StoreService) Save() {
+	_ = s.store.Save()
+}
