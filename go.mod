@@ -1,6 +1,6 @@
 module github.com/cihanerman/SimpleMap
 
-go 1.21.7
+go 1.22.0
 
 require github.com/go-playground/validator/v10 v10.17.0
 

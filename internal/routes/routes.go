@@ -11,14 +11,11 @@ import (
 
 func NewServer() *http.Server {
 	mux := http.NewServeMux()
-	//mux.HandleFunc("/", healthCheckHandler)
 
-	// TODO: This will change in go 1.22
-	// sample mux.HandleFunc("GET /healthcheck", healthCheckHandler)
-	mux.HandleFunc("/healthcheck", healthCheckHandler)
-	mux.HandleFunc("/set_key", setKeyHandler)
-	mux.HandleFunc("/get_key", getKeyHandler)
-	mux.HandleFunc("/delete_key", deleteKeyHandler)
+	mux.HandleFunc("GET /healthcheck", healthCheckHandler)
+	mux.HandleFunc("POST /key", setKeyHandler)
+	mux.HandleFunc("GET /key/{key}", getKeyHandler)
+	mux.HandleFunc("DELETE /key/{key}", deleteKeyHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -33,13 +30,7 @@ func NewServer() *http.Server {
 }
 
 func deleteKeyHandler(writer http.ResponseWriter, request *http.Request) {
-	// TODO: This will delete in go 1.22
-	if request.Method != http.MethodGet {
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	key := request.URL.Query().Get("key")
+	key := request.PathValue("key")
 	if key == "" {
 		http.Error(writer, "Key is required", http.StatusBadRequest)
 		return
@@ -52,13 +43,7 @@ func deleteKeyHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getKeyHandler(writer http.ResponseWriter, request *http.Request) {
-	// TODO: This will delete in go 1.22
-	if request.Method != http.MethodGet {
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	key := request.URL.Query().Get("key")
+	key := request.PathValue("key")
 	if key == "" {
 		http.Error(writer, "Key is required", http.StatusBadRequest)
 		return
@@ -84,12 +69,6 @@ func getKeyHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func setKeyHandler(writer http.ResponseWriter, request *http.Request) {
-	// TODO: This will delete in go 1.22
-	if request.Method != http.MethodPost {
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	var storeDto simple_map.StoreDto
 	err := json.NewDecoder(request.Body).Decode(&storeDto)
 	if err != nil {
@@ -112,11 +91,6 @@ func setKeyHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func healthCheckHandler(writer http.ResponseWriter, request *http.Request) {
-	// TODO: This will delete in go 1.22
-	if request.Method != http.MethodGet {
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
 	writer.WriteHeader(http.StatusOK)
 	_, err := writer.Write([]byte("I'm still alive"))
 	if err != nil {
