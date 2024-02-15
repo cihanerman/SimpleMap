@@ -93,7 +93,7 @@ func setKeyHandler(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 }
 
-func healthCheckHandler(writer http.ResponseWriter, request *http.Request) {
+func healthCheckHandler(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 	_, err := writer.Write([]byte("I'm still alive"))
 	if err != nil {
