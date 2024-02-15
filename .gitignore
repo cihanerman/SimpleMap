@@ -22,3 +22,4 @@ go.work
 /pkg/utils/test.json
 /internal/simple_map/store.json
 /store.json
+/users.json

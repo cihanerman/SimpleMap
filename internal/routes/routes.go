@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/cihanerman/SimpleMap/internal/simple_map"
+	"github.com/cihanerman/SimpleMap/pkg/auth"
 	"github.com/go-playground/validator/v10"
 	"net/http"
 	"os"
@@ -12,10 +13,12 @@ import (
 func NewServer() *http.Server {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /healthcheck", healthCheckHandler)
-	mux.HandleFunc("POST /key", setKeyHandler)
-	mux.HandleFunc("GET /key/{key}", getKeyHandler)
-	mux.HandleFunc("DELETE /key/{key}", deleteKeyHandler)
+	// Registering the handlers
+	mux.HandleFunc("GET /{$}", auth.BasicAuth(healthCheckHandler))
+	mux.HandleFunc("GET /healthcheck", auth.BasicAuth(healthCheckHandler))
+	mux.HandleFunc("POST /key", auth.BasicAuth(setKeyHandler))
+	mux.HandleFunc("GET /key/{key}", auth.BasicAuth(getKeyHandler))
+	mux.HandleFunc("DELETE /key/{key}", auth.BasicAuth(deleteKeyHandler))
 
 	port := os.Getenv("PORT")
 	if port == "" {
